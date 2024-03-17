@@ -122,9 +122,9 @@ function App(): JSX.Element {
             width={24}
             height={24}
             alt="Blast"
-            src={"/aurora.png"}
+            src={"/abr.png"}
           />
-          Aurora Network
+          Arb One Network
         </div>
       </div>
 

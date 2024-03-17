@@ -3,7 +3,7 @@
 
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react'
 import { WagmiConfig } from 'wagmi';
-import { auroraTestnet } from 'viem/chains';
+import { arbitrum } from 'viem/chains';
 
 const projectId = '51ae514fa96b0e153cc780ea9acc1d08'; 
 
@@ -14,7 +14,7 @@ const metadata = {
   icons: ['https://example.com/app-icon.png'],
 };
 
-const chains = [auroraTestnet]
+const chains = [arbitrum]
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 
 createWeb3Modal({ wagmiConfig, projectId, enableAnalytics: true});

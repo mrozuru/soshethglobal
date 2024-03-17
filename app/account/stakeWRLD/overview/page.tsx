@@ -149,11 +149,11 @@ function App(): JSX.Element {
           <Image
             width={24}
             height={24}
-            alt="Aurora"
-            src={"/aurora.png"}
+            alt="arb"
+            src={"/arb.png"}
           />
           <div className="flex flex-row justify-between w-80">
-            <div>Aurora Network</div>
+            <div>Arb One Network</div>
             <div className="text-green-500">{address ? 'Connected' : ''}</div>
           </div>
         </div>

@@ -75,9 +75,9 @@ function App(): JSX.Element {
             width={24}
             height={24}
             alt="Blast"
-            src={"/aurora.pngg"}
+            src={"/arb.png"}
           />
-          Aurora Network
+          Arb One Network
         </div>
       </div>
 
