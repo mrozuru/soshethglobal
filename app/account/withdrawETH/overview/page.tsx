@@ -21,7 +21,7 @@ function App(): JSX.Element {
           />
         </button>
         <h2 className="font-medium leading-Sosh22 text-SoshColorGrey700">
-          Stake ETH
+          Withdraw ETH
         </h2>
       </div>
 
@@ -40,12 +40,20 @@ function App(): JSX.Element {
         </div>
         <div className="flex items-center gap-2 leading-Sosh22 font-bold text-white">
           <Transfer color="white" />
-
           <p>2000 SST</p>
         </div>
       </div>
 
-      <div className="flex min-w-96 flex-col mb-11 bg-white py-4 px-8 gap-2 items-start rounded-2xl sosh__background border border-SoshColorGrey300">
+      <div className="flex flex-col gap-2 w-96 mb-8">
+        <div className="text-sm font-medium leading-Sosh22 text-SoshColorGrey700">
+          Wallet Address
+        </div>
+        <div className="flex items-center px-8 text-sm font-medium leading-Sosh22 bg-white gap-2 py-4 w-full border rounded-3xl border-SoshColorGrey300 select-none">
+          0x132o3820udsandasodisadsakda813
+        </div>
+      </div>
+
+      <div className="flex min-w-96 flex-col mb-10 bg-white py-4 px-8 gap-2 items-start rounded-2xl sosh__background border border-SoshColorGrey300">
         <div className="flex justify-between w-full text-SoshColorGrey600">
           <div className="leading-Sosh22 text-black">Amount Total</div>
           <div className="text-xs text-black leading-Sosh22 ">0.5 ETH</div>
@@ -65,8 +73,8 @@ function App(): JSX.Element {
       <div className="w-96">
         <div className="flex flex-col m-auto gap-2">
           <button
-            onClick={() => router.push("/account/stakeETH/connectwallet")}
-            className={`p-4 w-full rounded-2xl leading-5 text-sm text-white sosh__linear-gradient`}
+            onClick={() => router.push("/account/withdrawETH/status")}
+            className={`p-4 w-full rounded-2xl font-bold leading-5 text-sm text-white sosh__linear-gradient`}
           >
             Confirm
           </button>

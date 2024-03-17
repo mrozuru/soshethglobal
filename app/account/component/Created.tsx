@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-// import required modules
 import { axios } from "@/lib";
 import Loading from "@/app/loading";
 import Card from "./Card";
 
-const Asset = () => {
+const Created = () => {
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -36,4 +35,4 @@ const Asset = () => {
   return <div>{isLoading ? <Loading /> : <Card data={data} />}</div>;
 };
 
-export default Asset;
+export default Created;

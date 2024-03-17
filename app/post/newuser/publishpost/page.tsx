@@ -13,8 +13,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import { Pagination } from "swiper/modules";
-
 function App(): JSX.Element {
   const { ready, authenticated, user } = usePrivy();
 

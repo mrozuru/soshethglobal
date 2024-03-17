@@ -46,7 +46,7 @@ const Trending = () => {
         <button
           className={
             activeTab === "Daily"
-              ? "text-white py-2 px-4 rounded-lg bg-SoSHColorPrimary"
+              ? "text-white py-2 px-4 rounded-lg sosh__linear-gradient"
               : "text-SoshColorGrey500 py-2 px-4"
           }
           onClick={(e) => setActiveTab("Daily")}
@@ -56,7 +56,7 @@ const Trending = () => {
         <button
           className={
             activeTab === "Weekly"
-              ? "text-white py-2 px-4 rounded-lg bg-SoSHColorPrimary"
+              ? "text-white py-2 px-4 rounded-lg sosh__linear-gradient"
               : "text-SoshColorGrey500 py-2 px-4"
           }
           onClick={(e) => setActiveTab("Weekly")}
@@ -66,7 +66,7 @@ const Trending = () => {
         <button
           className={
             activeTab === "Monthly"
-              ? "text-white py-2 px-4 rounded-lg bg-SoSHColorPrimary"
+              ? "text-white py-2 px-4 rounded-lg sosh__linear-gradient"
               : "text-SoshColorGrey500 py-2 px-4"
           }
           onClick={(e) => setActiveTab("Monthly")}

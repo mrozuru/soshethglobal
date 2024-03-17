@@ -86,7 +86,7 @@ function App(): JSX.Element {
 
       <div className="w-96">
         <button
-          onClick={() => router.push("/account/stakeETH/connectwallet")}
+          onClick={() => router.push("/account/stakeETH/stakeStatus")}
           className={`p-4 w-full font-bold rounded-2xl leading-5 text-sm mb-7 text-white sosh__linear-gradient`}
         >
           Open in Coinbase wallet

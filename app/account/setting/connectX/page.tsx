@@ -12,7 +12,7 @@ function App(): JSX.Element {
   const handleSubmit = async () => {};
 
   return (
-    <div className="h-screen flex justify-start flex-col items-center">
+    <div className="h-screen w-full bg-SoshBackground fixed z-[72] top-0 flex justify-start flex-col items-center">
       <div className="w-full flex-col flex items-center justify-center">
         <div className="mb-10 mt-8">
           <button className="absolute left-4" onClick={() => router.back()}>
@@ -53,12 +53,6 @@ function App(): JSX.Element {
             Proceed
           </button>
         </div>
-        <button
-          className="w-96 leading-Sosh22 text-sm text-SoSHColorPrimary rounded-2xl p-4 mb-6 border border-SoshColorGrey300"
-          onClick={() => router.push("/post/newuser/connectInstagram")}
-        >
-          Skip
-        </button>
       </div>
     </div>
   );

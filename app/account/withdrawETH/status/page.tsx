@@ -21,7 +21,7 @@ function App(): JSX.Element {
           />
         </button>
         <h2 className="font-medium leading-Sosh22 text-SoshColorGrey700">
-          Publish status
+          Withdraw status
         </h2>
       </div>
 
@@ -47,9 +47,9 @@ function App(): JSX.Element {
 
       <button
         className="p-4 w-96 max-w-96 rounded-2xl font-bold leading-Sosh22 sosh__linear-gradient text-white"
-        onClick={() => router.push("/account")}
+        onClick={() => router.push("/account/transaction")}
       >
-        Check your asset
+        View transaction
       </button>
     </div>
   );

@@ -270,9 +270,7 @@ const Card = ({ data }: data) => {
 
                       <div>
                         <button
-                          onClick={() =>
-                            router.push("/ccts/purchaseCCT/status")
-                          }
+                          onClick={() => router.push("/account/assetstatus")}
                           className="w-full font-bold px-16 py-4 sosh__linear-gradient text-white rounded-2xl"
                         >
                           Confirm
@@ -285,7 +283,7 @@ const Card = ({ data }: data) => {
             )}
 
             {showHoldersModal && (
-              <div className="fixed inset-0 z-[71] bg-gray-600 bg-opacity-10 overflow-y-auto h-full w-full flex items-center justify-center">
+              <div className="fixed inset-0 z-[105] bg-gray-600 bg-opacity-10 overflow-y-auto h-full w-full flex items-center justify-center">
                 <div className="py-8 px-2 w-360 border shadow-lg rounded-2xl bg-white">
                   <div className="flex flex-col gap-8">
                     <div className="flex justify-between px-8">
@@ -309,6 +307,7 @@ const Card = ({ data }: data) => {
                         />
                       </button>
                     </div>
+
                     <div
                       className="flex justify-between px-4"
                       onClick={() => router.push("account/otherAccount")}

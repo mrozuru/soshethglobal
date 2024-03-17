@@ -21,7 +21,7 @@ function App(): JSX.Element {
           />
         </button>
         <h2 className="font-medium leading-Sosh22 text-SoshColorGrey700">
-          Publish status
+          Purchase status
         </h2>
       </div>
 

@@ -9,10 +9,7 @@ import { axios } from "@/lib";
 function App(): JSX.Element {
   const router = useRouter();
 
-  const handleSubmit = async () => {
-    const a = await axios.post("/twitter");
-    console.log(a);
-  };
+  const handleSubmit = async () => {};
 
   return (
     <div className="h-screen flex justify-start flex-col items-center">

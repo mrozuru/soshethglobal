@@ -22,6 +22,9 @@ const config: Config = {
         SoshColorGrey700: "#344054",
         SoshColorGreyScale: "#212121",
         SoshButtonDisable: "#FBFBFB",
+        SoshStatusWordColor: "#212121",
+        SoshOrange: "#FC8F7D",
+        SoshBackground: "#f2efe8",
       },
       lineHeight: {
         Sosh22: "140%",

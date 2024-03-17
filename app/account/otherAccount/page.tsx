@@ -3,21 +3,33 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-import Overview from "./component/Overview";
-import Asset from "./component/Asset";
 import { useRouter } from "next/navigation";
+import Created from "../component/Created";
+import Holding from "../component/Holding";
 
 function App(): JSX.Element {
-  const [activeTab, setActiveTab] = useState<string>("Overview");
+  const [activeTab, setActiveTab] = useState<string>("Created");
   const [showFollowModal, setShowFollowModal] = useState(false);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
 
   const router = useRouter();
 
   return (
     <div>
       <div className="relative px-8 pt-9 flex flex-col sosh__linear-gradient mb-4 w-full">
+        <button className="mb-3" onClick={() => router.back()}>
+          <Image
+            priority={true}
+            src={"/BackArrowStatus.svg"}
+            width={24}
+            height={24}
+            alt="back arrow"
+          />
+        </button>
+
         <div className="flex mb-3 w-full items-center justify-between">
           <Image alt="" src={"/profilePic.svg"} width={72} height={72} />
+
           <div
             onClick={() => setShowFollowModal(true)}
             className="flex flex-col text-white items-center"
@@ -34,17 +46,17 @@ function App(): JSX.Element {
             <div className="text-sm">Followers</div>
           </div>
 
-          <button onClick={() => router.push("/account/setting")}>
-            <Image
-              alt="settings"
-              src={"/settingIcon.svg"}
-              width={40}
-              height={40}
-            />
+          <button
+            className="px-4 py-2 bg-white text-SoshOrange text-xs leading-Sosh22 rounded-lg"
+            onClick={() => setIsFollowing((prev) => !prev)}
+          >
+            {isFollowing ? "Following" : "Follw"}
           </button>
         </div>
 
-        <div className="text-white font-bold leading-Sosh22 mb-4">@john254</div>
+        <div className="text-white font-bold leading-Sosh22 mb-4">
+          @Kevin254
+        </div>
 
         <div className="flex gap-4 mb-4">
           <Image alt="" src={"/x.svg"} width={20} height={20} />
@@ -59,24 +71,24 @@ function App(): JSX.Element {
       </div>
       <div className="flex justify-between w-full items-start px-10 mb-6">
         <button
-          onClick={() => setActiveTab("Overview")}
+          onClick={() => setActiveTab("Created")}
           className={`px-8 py-2 text-xs font-[425] leading-5 ${
-            activeTab === "Overview"
+            activeTab === "Created"
               ? " sosh__linear-gradient text-white "
               : " border border-SoSHColorDisabled bg-white text-SoshColorGrey500 "
           }rounded-lg`}
         >
-          Overview
+          Created
         </button>
         <button
-          onClick={() => setActiveTab("Asset")}
+          onClick={() => setActiveTab("Holding")}
           className={`px-8 py-2 text-xs font-[425] leading-5 ${
-            activeTab === "Asset"
+            activeTab === "Holding"
               ? " sosh__linear-gradient text-white "
               : " border border-SoSHColorDisabled bg-white text-SoshColorGrey500 "
           }rounded-lg`}
         >
-          Asset
+          Holding
         </button>
       </div>
 
@@ -146,8 +158,8 @@ function App(): JSX.Element {
         </div>
       )}
 
-      {activeTab === "Overview" && <Overview />}
-      {activeTab === "Asset" && <Asset />}
+      {activeTab === "Created" && <Created />}
+      {activeTab === "Holding" && <Holding />}
     </div>
   );
 }
