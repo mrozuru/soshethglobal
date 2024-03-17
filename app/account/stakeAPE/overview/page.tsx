@@ -15,7 +15,7 @@ import { BigNumber, ethers } from 'ethers';
 import { useAccount, useContractWrite, useDisconnect } from 'wagmi';
 import SSTABI from '../../../../contracts/SST.json'; 
 
-const contractAddress = '0x62FAD8c5ff4A29e91De109C6A64C03aA9b2860F3';
+const contractAddress = '0xd44687D397aaFdEc583bd6218820713Bfa10c59c';
 const apeContractAddress = '0x01e61008F78A83E0DaBd2FBd7ef81B64cdD2e1F4';
 
 
