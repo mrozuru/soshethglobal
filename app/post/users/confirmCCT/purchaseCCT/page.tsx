@@ -12,8 +12,8 @@ import { ethers } from 'ethers';
 import CertiABI from '../../../../../contracts/Certi.json'; 
 import SSTABI from '../../../../../contracts/SST.json'; 
 
-const SSTContractAddress = '0x593600A2531869C4a493AB62065336AcD843849E';
-const CertiContractAddress = '0x38ad2F92da092442F7657E439Da8e122B5bC3908';
+const SSTContractAddress = '0x97D1F1c5dF276f7af2a8E5Ff794635A39490B4B0';
+const CertiContractAddress = '0xB2681BF2398649bBef2c350188598555e93d733b';
 
 function App(): JSX.Element {
   const router = useRouter();
@@ -86,7 +86,7 @@ function App(): JSX.Element {
               ipfs: ipfsLink,
               views: [],
               videoIds: videoIds,
-              asserId: scaledAssetIdInt
+              assetId: scaledAssetIdInt
             });
           } else {
             await axios.post("/uploadPost", {
@@ -96,7 +96,7 @@ function App(): JSX.Element {
               ipfs: ipfsLink,
               views: [],
               videoIds: [],
-              asserId: scaledAssetIdInt
+              assetId: scaledAssetIdInt
             });
           }
           // Redirect after successful post
@@ -113,38 +113,6 @@ function App(): JSX.Element {
     }
   };
 
-  // const handleClick = async () => {
-  //   if (postData && postData.image && postData.userStory) {
-  //     try {
-  //       const { image, ipfsLink, videoIds, userStory, user } = postData;
-
-  //       if (postData.files[0].type === "video/mp4") {
-  //         await axios.post("/uploadPost", {
-  //           url: image,
-  //           userId: user?.id,
-  //           story: userStory,
-  //           ipfs: ipfsLink,
-  //           views: [],
-  //           videoIds: videoIds,
-  //         });
-  //       } else {
-  //         await axios.post("/uploadPost", {
-  //           url: image,
-  //           userId: user?.id,
-  //           story: userStory,
-  //           ipfs: ipfsLink,
-  //           views: [],
-  //           videoIds: [],
-  //         });
-  //       }
-  //       // Redirect after successful post
-  //       router.push("/post/users/poststatus");
-  //     } catch (error) {
-  //       console.error("Failed to upload post:", error);
-  //       // Handle error (e.g., show error message to user)
-  //     }
-  //   }
-  // };
 
   return (
     <div className="h-full flex justify-start flex-col items-center">

@@ -10,10 +10,10 @@ const Top = () => {
   const [activeTab, setActiveTab] = useState<string>("Weekly");
 
   const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  // const [isLoading, setLoading] = useState(true);
 
   const fetchData = async (currentTab: string) => {
-    setLoading(true);
+    // setLoading(true);
     const date =
       currentTab === "Weekly"
         ? dayjs().subtract(7, "day").format("YYYY-MM-DD")
@@ -29,7 +29,7 @@ const Top = () => {
       })
       .then((response) => {
         setData(response.data);
-        setLoading(false);
+        // setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -74,7 +74,7 @@ const Top = () => {
           Monthly
         </button>
       </div>
-      <div>{isLoading ? <Loading /> : <Card data={data} />}</div>
+      <div>{ <Card data={data} />}</div>
     </div>
   );
 };

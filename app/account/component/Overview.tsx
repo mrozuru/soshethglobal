@@ -37,7 +37,7 @@ const Overview = () => {
         </div>
         <div className="flex w-full px-4 justify-between">
           <button
-            onClick={() => router.push("/account/stakeETH")}
+            onClick={() => router.push("/account/stakeCoins")}
             className="px-8 text-sm leading-Sosh22 py-2 sosh__linear-gradient text-white rounded-lg"
           >
             Stake

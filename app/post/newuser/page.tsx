@@ -83,7 +83,7 @@ function App(): JSX.Element {
           <Image
             priority={true}
             className="object-cover h-full rounded-2xl overflow-hidden"
-            src={previewUrl || "/ProfilePic.svg"}
+            src={previewUrl || "/profilePic.svg"}
             width={120}
             height={120}
             alt="uploaded picture"

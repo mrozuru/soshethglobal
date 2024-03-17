@@ -9,10 +9,10 @@ import Card from "./Card";
 
 const Asset = () => {
   const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  // const [isLoading, setLoading] = useState(true);
 
   const fetchData = async () => {
-    setLoading(true);
+    // setLoading(true);
 
     const user = localStorage.getItem("user");
 
@@ -22,7 +22,7 @@ const Asset = () => {
       })
       .then((response) => {
         setData(response.data);
-        setLoading(false);
+        // setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -33,7 +33,7 @@ const Asset = () => {
     fetchData();
   }, []);
 
-  return <div>{isLoading ? <Loading /> : <Card data={data} />}</div>;
+  return <div>{ <Card data={data} />}</div>;
 };
 
 export default Asset;

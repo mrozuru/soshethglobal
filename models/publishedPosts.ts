@@ -13,7 +13,7 @@ const PublishedPostsSchema = new mongoose.Schema(
       type: String,
       ref: "User",
     },
-    asserId: {
+    assetId: {
       type: Number,
       unique: true,
     },

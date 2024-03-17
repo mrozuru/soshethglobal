@@ -100,7 +100,7 @@ function App(): JSX.Element {
             onClick={() => router.push("/account/setting/connectX")}
           >
             <div className="flex gap-2 items-center">
-              <Image alt="x" src={"/twitterBlack.svg"} width={24} height={24} />
+              <Image alt="x" src={"X.svg"} width={24} height={24} />
               <span className="text-sm font-medium text-SoshColorGrey500">
                 Connect X
               </span>
@@ -113,13 +113,13 @@ function App(): JSX.Element {
           >
             <div className="flex gap-2 items-center">
               <Image
-                alt="instagram"
-                src={"/instagramBlack.svg"}
+                alt="worldcoin"
+                src={"/wc-logo.png"}
                 width={24}
                 height={24}
               />
               <span className="text-sm font-medium text-SoshColorGrey500">
-                Connect Instagram
+                Connect Worldcoin
               </span>
             </div>
             <Image alt="" src={"/chevron-right.svg"} width={24} height={24} />

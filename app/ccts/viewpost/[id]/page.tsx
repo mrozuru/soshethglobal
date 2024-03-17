@@ -47,7 +47,7 @@ function App(): JSX.Element {
   const param = useParams();
 
   const [data, setData] = useState<data | undefined>();
-  const [isLoading, setLoading] = useState(true);
+  // const [isLoading, setLoading] = useState(true);
 
   const faces = [
     { id: 1, name: "John", imgUrl: "/exampleUser1.svg" },
@@ -68,7 +68,7 @@ function App(): JSX.Element {
         .then((response) => {
           setData(response.data);
           setPostLiked(response.data.likes.includes(user));
-          setLoading(false);
+          // setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -77,7 +77,7 @@ function App(): JSX.Element {
   }, [param]);
 
   useEffect(() => {
-    if (!isLoading) {
+    // if (!isLoading) {
       const user = localStorage.getItem("user");
       axios
         .post(
@@ -92,14 +92,14 @@ function App(): JSX.Element {
         )
         .then((response) => {
           setData(response.data);
-          setLoading(false);
+          // setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
-    }
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, postLiked]);
+  }, [ postLiked]);
 
   const handleDecreaseCCTs = () => {
     if (cctAmount === 0) {
@@ -115,9 +115,9 @@ function App(): JSX.Element {
 
   return (
     <>
-      {isLoading ? (
+      {/* {isLoading ? (
         <Loading />
-      ) : (
+      ) : ( */}
         <>
           <div className="flex fixed top-0 left-0 z-30 w-screen justify-center flex-col items-center">
             <div className="mb-8 mt-10 font-[425] ">
@@ -245,9 +245,8 @@ function App(): JSX.Element {
           <div className="flex gap-2 px-4 text-sm leading-Sosh22">
             <div>@cutme</div>
             <div>
-              I did a good job today.Lorem ipsum dolor sit amet, consectetur
-              adipiscing elit, sed do asaeiusmod tempor incididunt ut
-              laboresasa!
+              Wow! Such a nice art - would love to learn how you
+              did the blurr mixed with the lighting
             </div>
             <div className="w-7">
               <button onClick={() => setActive((prev) => !prev)}>
@@ -507,7 +506,7 @@ function App(): JSX.Element {
             </div>
           )}
         </>
-      )}
+      {/* )} */}
     </>
   );
 }

@@ -7,6 +7,17 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { useContractRead } from 'wagmi';
+import SSTABI from '../../../contracts/SST.json'; 
+import CertiABI from '../../../contracts/Certi.json'; 
+import { BigNumber, ethers } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
+import { useWallets, usePrivy } from "@privy-io/react-auth";
+
+
+const SSTContractAddress = '0x97D1F1c5dF276f7af2a8E5Ff794635A39490B4B0'; 
+const CertiContractAddress = '0xB2681BF2398649bBef2c350188598555e93d733b';
+
 interface data {
   comments: string[];
   createdAt: string;
@@ -16,6 +27,7 @@ interface data {
   url: string[];
   userId: string;
   _id: string;
+  assetId: number;
 }
 
 const LeaderBoard = () => {
@@ -24,14 +36,96 @@ const LeaderBoard = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showHoldersModal, setShowHoldersModal] = useState<boolean>(false);
   const [data, setData] = useState<data[]>([]);
-  const [isLoading, setLoading] = useState(true);
+  // const [isLoading, setLoading] = useState(true);
+
+  const [sstBalance, setSSTBalance] = useState('');
+  const [cctBalance, setCCTBalance] = useState('');
+  const { user, authenticated } = usePrivy();
+  const { ready, wallets } = useWallets();
+  const [embeddedWalletPirvy, setEmbeddedWalletPirvy] = useState<any>(null);
+  const [privyAddress, setPrivyAddress] = useState<string>('null');
+  const [amount, setAmount] = useState(BigNumber.from(ethers.utils.parseUnits('1', 'ether')));
+  const [currentAssetId, setCurrentAssetId] = useState(0);
+  const [formattedBuyPrice, setFormattedBuyPrice] = useState('Calculating...');
+
+  const { data: buyPriceData } = useContractRead({
+    address: CertiContractAddress,
+    abi: CertiABI,
+    functionName: 'getBuyPriceAfterFee',
+    args: [currentAssetId, amount],
+    watch: true
+  });
+  
+  const { data: sellPriceData } = useContractRead({
+    address: CertiContractAddress,
+    abi: CertiABI,
+    functionName: 'getSellPriceAfterFee',
+    args: [currentAssetId, amount],
+    watch: true
+  });
+
+  const { data: sstBalanceData } = useContractRead({
+    address: SSTContractAddress, 
+    abi: SSTABI,
+    functionName: 'balanceOf',
+    args: [privyAddress],
+    watch: true, 
+  });
+
+  const { data: cctBalanceData } = useContractRead({
+    address: CertiContractAddress, 
+    abi: CertiABI,
+    functionName: 'balanceOf',
+    args: [privyAddress, currentAssetId],
+    watch: true, 
+  });
+  
+
+  useEffect(() => {
+    if (authenticated && user && wallets.length > 0 && ready) {
+      // Assuming the embedded wallet's address matches user.wallet?.address
+      const embeddedWallet = wallets.find(wallet => wallet.address === user.wallet?.address);
+      if (embeddedWallet) {
+        setEmbeddedWalletPirvy(embeddedWallet);
+        setPrivyAddress(embeddedWallet.address ?? ''); 
+      }
+    }
+  }, [wallets, user, authenticated, ready]);
+
+  useEffect(() => {
+    if (option === "Buy" && buyPriceData) {
+      setFormattedBuyPrice(numberWithCommas(parseFloat(formatUnits(buyPriceData as BigNumber, 18)).toString()));
+    } else if (sellPriceData) {
+      setFormattedBuyPrice(numberWithCommas(parseFloat(formatUnits(sellPriceData as BigNumber, 18)).toString()));
+    }
+  }, [buyPriceData, sellPriceData, option]);
+  
+  useEffect(() => {
+    if (sstBalanceData) {
+      setSSTBalance(numberWithCommas(parseFloat(formatUnits(sstBalanceData as BigNumber, 18)).toFixed(0).toString()));
+    }
+  }, [sstBalanceData]);
+
+  useEffect(() => {
+    if (cctBalanceData) {
+      setCCTBalance(numberWithCommas(parseFloat(formatUnits(cctBalanceData as BigNumber, 18)).toFixed(0).toString()));
+    }
+  }, [cctBalanceData]);
+  
+  function numberWithCommas(x: String) {
+    return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  const formatAccountAddress = (address: string): string => {
+    return address.length > 0 ? `${address.slice(0, 5)}...${address.slice(-3)}` : address;
+  }
 
   useEffect(() => {
     axios
       .get("/leaderBoard")
       .then((response) => {
         setData(response.data);
-        setLoading(false);
+        // setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -39,17 +133,69 @@ const LeaderBoard = () => {
   }, []);
 
   const handleDecreaseCCTs = () => {
-    if (cctAmount === 0) {
-      return;
+    if (cctAmount > 1) { 
+      setCctAmount((prev) => prev - 1);
+      setAmount(amount.sub(ethers.utils.parseUnits('1', 'ether')));
     }
-    setCctAmount((prev) => prev - 1);
   };
 
-  const handleShowModal = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void => {
+  const handleIncreaseCCTs = () => {
+    setCctAmount((prev) => prev + 1);
+    setAmount(amount.add(ethers.utils.parseUnits('1', 'ether')));
+  };
+  
+  const handleShowModal = (assetId: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    setCurrentAssetId(assetId); 
     setShowModal(true);
     e.stopPropagation();
+  };
+
+  const handleBuyAsset = async () => {
+    if (!embeddedWalletPirvy || parseInt(amount.toString()) <= 0) return;
+
+    if (option === "Buy" && buyPriceData) {
+      const embeddedProvider = await embeddedWalletPirvy.getEthereumProvider();
+      const ethersProvider = new ethers.providers.Web3Provider(embeddedProvider);
+      const signer = ethersProvider.getSigner();
+      const certiContract = new ethers.Contract(CertiContractAddress, CertiABI, signer);
+      const sstContract = new ethers.Contract(SSTContractAddress, SSTABI, signer);
+    
+      try {
+        const approveTx = await sstContract.approve(CertiContractAddress, buyPriceData);
+        await approveTx.wait();
+
+        const buyTx = await certiContract.buy(currentAssetId, cctAmount);
+        await buyTx.wait();
+    
+        console.log("Asset purchased successfully!");
+        router.push("ccts/purchaseCCT/status?type=purchase");
+
+      } catch (error) {
+        console.error("An error occurred during the purchase:", error);
+      }
+    } else if (option === "Sell" && sellPriceData) {
+      const embeddedProvider = await embeddedWalletPirvy.getEthereumProvider();
+      const ethersProvider = new ethers.providers.Web3Provider(embeddedProvider);
+      const signer = ethersProvider.getSigner();
+      const certiContract = new ethers.Contract(CertiContractAddress, CertiABI, signer);
+      const sstContract = new ethers.Contract(SSTContractAddress, SSTABI, signer);
+    
+      try {
+        const approveTx = await sstContract.approve(CertiContractAddress, buyPriceData);
+        await approveTx.wait();
+
+        const buyTx = await certiContract.sell(currentAssetId, cctAmount);
+        await buyTx.wait();
+    
+        console.log("Asset purchased successfully!");
+        router.push("ccts/purchaseCCT/status?type=sell");
+
+      } catch (error) {
+        console.error("An error occurred during the purchase:", error);
+      }
+    }
+  
+    
   };
 
   const router = useRouter();
@@ -62,13 +208,14 @@ const LeaderBoard = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Loading />
-      ) : (
+      {/* {isLoading ? ( */}
+        {/* <Loading /> */}
+      {/* ) : ( */}
+      {
         data &&
         data.map((detail, idx) => {
           return (
-            <div key={idx} className="w-96 m-auto flex flex-col gap-4">
+            <div key={idx} className="w-96 m-auto flex flex-col gap-6 mb-4 ">
               <div className="flex w-full justify-between">
                 <div
                   style={{ backgroundImage: `url(${detail.url[0]})` }}
@@ -98,8 +245,8 @@ const LeaderBoard = () => {
                       </div>
                       <div className="w-28 h-[1px] bg-white"></div>
                       <button
-                        onClick={(e) => handleShowModal(e)}
-                        className="px-2 rounded-xl bg-white py-[2px] text-sm font-bold text-SoSHColorPrimary"
+                      onClick={(e) => handleShowModal(detail.assetId, e)} // Pass the assetId of the current detail
+                      className="px-2 rounded-xl bg-white py-[2px] text-sm font-bold text-SoSHColorPrimary"
                       >
                         Trade
                       </button>
@@ -250,7 +397,7 @@ const LeaderBoard = () => {
                               My Balance
                             </div>
                             <div className="flex gap-2 text-SoshColorGrey600 text-2xl leading-5 items-end">
-                              $3490
+                             {sstBalance} SST
                             </div>
                             <div className="text-SoshColorGrey600 text-sm leading-5 font-medium">
                               My Holdings
@@ -259,13 +406,13 @@ const LeaderBoard = () => {
 
                           <div className="flex flex-col gap-8 items-end">
                             <div className="text-SoshColorGrey500 text-sm leading-5">
-                              0x27a1...718sgja
+                              {formatAccountAddress(privyAddress)}
                             </div>
                             <div className="text-SoshColorGrey600 text-sm leading-5">
-                              Asset ID: UXS123
+                              Asset ID: {detail.assetId.toString()}
                             </div>
                             <div className="text-SoshColorGrey600 text-sm leading-5">
-                              0
+                            {cctBalance} CCT
                             </div>
                           </div>
                         </div>
@@ -286,7 +433,7 @@ const LeaderBoard = () => {
                             </span>
                           </div>
                           <button
-                            onClick={() => setCctAmount((prev) => prev + 1)}
+                            onClick={handleIncreaseCCTs}
                             className="flex px-4 py-3 rounded-2xl bg-white font-bold leading-5 text-sm"
                           >
                             +
@@ -299,11 +446,11 @@ const LeaderBoard = () => {
                               Total Cost
                             </div>
                             <div className="flex gap-4 items-center">
-                              <span className="text-SoshColorGrey600 text-2xl leading-Sosh22">
+                              {/* <span className="text-SoshColorGrey600 text-2xl leading-Sosh22">
                                 $2000
-                              </span>
+                              </span> */}
                               <span className="text-SoshColorGrey600 font-medium leading-Sosh22">
-                                20 SST
+                                {formattedBuyPrice} SST
                               </span>
                             </div>
                           </div>
@@ -311,9 +458,7 @@ const LeaderBoard = () => {
 
                         <div>
                           <button
-                            onClick={() =>
-                              router.push("/ccts/purchaseCCT/status")
-                            }
+                            onClick={handleBuyAsset}
                             className="w-full font-bold px-16 py-4 sosh__linear-gradient text-white rounded-2xl"
                           >
                             Confirm
@@ -327,7 +472,7 @@ const LeaderBoard = () => {
             </div>
           );
         })
-      )}
+      }
     </>
   );
 };

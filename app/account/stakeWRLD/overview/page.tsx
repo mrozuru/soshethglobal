@@ -21,8 +21,8 @@ function App(): JSX.Element {
   const { user, ready, authenticated } = usePrivy();
   const router = useRouter();
   const searchParams = useSearchParams()
-  const eth = searchParams.get('eth');
-  const ethAmount = eth ? parseFloat(eth) : 0;
+  const wld = searchParams.get('wld');
+  const wldAmount = wld ? parseFloat(wld) : 0;
   const [sstAmount, setSstAmount] = useState(0);
   const [privyAddress, setPrivyAddress] = useState<string | null>(null);
   const { disconnect } = useDisconnect();
@@ -39,20 +39,20 @@ function App(): JSX.Element {
   const GAS_FEE_PERCENTAGE = 2; // 2%
 
   // Calculate the number of SST tokens for a given amount of ETH
-  const calculateSST = (eth: number) => {
-    return (eth * 10 ** 18) / MINT_PRICE_PER_TOKEN;
+  const calculateSST = (wld: number) => {
+    return (wld * 10 ** 18) / MINT_PRICE_PER_TOKEN;
   };
 
   // Calculate the gas fee based on the percentage
-  const calculateGasFee = (eth: number) => {
-    return eth * (GAS_FEE_PERCENTAGE / 100);
+  const calculateGasFee = (wld: number) => {
+    return wld * (GAS_FEE_PERCENTAGE / 100);
   };
 
   // Update the SST amount when the ETH amount changes
   useEffect(() => {
-    const sst = calculateSST(ethAmount);
+    const sst = calculateSST(wldAmount);
     setSstAmount(sst);
-  }, [ethAmount]);
+  }, [wldAmount]);
 
   useEffect(() => {
     console.log(user, ready, authenticated);
@@ -64,7 +64,7 @@ function App(): JSX.Element {
   useEffect(() => {
     if (isMintSuccess) {
       disconnect();
-      router.push(`/account/stakeETH/stakeStatus?sst=${sstAmount}`);
+      router.push(`/account/stakeWLD/stakeStatus?sst=${sstAmount}`);
     }
   }, [isMintSuccess, router, sstAmount, disconnect]);
 
@@ -78,10 +78,10 @@ function App(): JSX.Element {
       }
     } else {
       try {
-        console.log(contractAddress, SSTABI, ethAmount, privyAddress, parseEther(sstAmount.toString()), parseEther((ethAmount + ethAmount * GAS_FEE_PERCENTAGE / 100).toString()))
+        console.log(contractAddress, SSTABI, wldAmount, privyAddress, parseEther(sstAmount.toString()), parseEther((wldAmount + wldAmount * GAS_FEE_PERCENTAGE / 100).toString()))
         await writeContract({
           args: [parseEther(sstAmount.toString()), privyAddress],
-          value: parseEther((ethAmount + ethAmount * GAS_FEE_PERCENTAGE / 100).toString())
+          value: parseEther((wldAmount + wldAmount * GAS_FEE_PERCENTAGE / 100).toString())
         });
       } catch (error) {
         console.error("Failed to execute contract write:", error);
@@ -102,7 +102,7 @@ function App(): JSX.Element {
           />
         </button>
         <h2 className="font-medium leading-Sosh22 text-SoshColorGrey700">
-          Stake ETH
+          Stake WLD
         </h2>
       </div>
 
@@ -117,7 +117,7 @@ function App(): JSX.Element {
         />
 
         <div className="flex gap-2 text-2xl leading-Sosh22 font-bold text-white">
-        {ethAmount} ETH
+        {wldAmount} WLD
         </div>
         <div className="flex items-center gap-2 leading-Sosh22 font-bold text-white">
           <Transfer color="white" />
@@ -129,16 +129,16 @@ function App(): JSX.Element {
       <div className="flex min-w-96 flex-col mb-11 bg-white py-4 px-8 gap-2 items-start rounded-2xl sosh__background border border-SoshColorGrey300">
       <div className="flex justify-between w-full text-SoshColorGrey600">
         <div className="leading-Sosh22 text-black">Amount Total</div>
-        <div className="text-xs text-black leading-Sosh22 ">{ethAmount} ETH</div>
+        <div className="text-xs text-black leading-Sosh22 ">{wldAmount} WLD</div>
       </div>
       <div className="flex justify-between w-full text-SoshColorGrey600">
         <div className="leading-Sosh22 text-black">Gas for Trading</div>
-        <div className="text-xs text-black leading-Sosh22">{calculateGasFee(ethAmount).toFixed(3)} ETH</div>
+        <div className="text-xs text-black leading-Sosh22">{calculateGasFee(wldAmount).toFixed(3)} WLD</div>
       </div>
       <div className="flex justify-between w-full text-SoshColorGrey600">
         <div className="leading-Sosh22 text-black">Total Cost</div>
         <div className="text-xs text-black leading-Sosh22">
-          {(ethAmount + calculateGasFee(ethAmount)).toFixed(3)} ETH | {sstAmount.toFixed(0)} SST
+          {(wldAmount + calculateGasFee(wldAmount)).toFixed(3)} WLD | {sstAmount.toFixed(0)} SST
         </div>
       </div>
       </div>

@@ -10,8 +10,7 @@ import SSTABI from '../../../../contracts/SST.json';
 import { BigNumber } from 'ethers'; 
 import { formatUnits } from 'ethers/lib/utils'; 
 
-const contractAddress = '0x593600A2531869C4a493AB62065336AcD843849E'; 
-
+const contractAddress = '0x97D1F1c5dF276f7af2a8E5Ff794635A39490B4B0'; 
 
 function App(): JSX.Element {
   const router = useRouter();

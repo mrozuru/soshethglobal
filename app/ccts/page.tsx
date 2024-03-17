@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
+//TODO: CHANGE THE CCT HEADER HERE
 import Trending from "./component/Trending";
 import Top from "./component/Top";
 import Latest from "./component/Latest";
@@ -42,12 +43,12 @@ function App(): JSX.Element {
           modules={[Autoplay]}
           loop={true}
           loopAddBlankSlides={false}
-        >
-          <SwiperSlide>
+        > 
+          <SwiperSlide >
             <Image
               priority={true}
               className="rounded-lg"
-              src={"/cctHeader1.svg"}
+              src={"/1.jpg"}
               width={320}
               height={144}
               alt="CCT Image"
@@ -57,7 +58,7 @@ function App(): JSX.Element {
             <Image
               priority={true}
               className="rounded-lg"
-              src={"/cctHeader1.svg"}
+              src={"/2.jpg"}
               width={320}
               height={144}
               alt="CCT Image"
@@ -67,7 +68,7 @@ function App(): JSX.Element {
             <Image
               priority={true}
               className="rounded-lg"
-              src={"/cctHeader1.svg"}
+              src={"/3.jpg"}
               width={320}
               height={144}
               alt="CCT Image"
@@ -77,7 +78,7 @@ function App(): JSX.Element {
             <Image
               priority={true}
               className="rounded-lg"
-              src={"/cctHeader1.svg"}
+              src={"/4.png"}
               width={320}
               height={144}
               alt="CCT Image"

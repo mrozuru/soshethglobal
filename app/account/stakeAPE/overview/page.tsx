@@ -10,19 +10,21 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { parseEther } from 'viem'
 
 import { usePrivy } from "@privy-io/react-auth";
+import { BigNumber, ethers } from 'ethers';
 
 import { useAccount, useContractWrite, useDisconnect } from 'wagmi';
 import SSTABI from '../../../../contracts/SST.json'; 
 
 const contractAddress = '0x97D1F1c5dF276f7af2a8E5Ff794635A39490B4B0';
+const apeContractAddress = '0x01e61008F78A83E0DaBd2FBd7ef81B64cdD2e1F4';
 
 
 function App(): JSX.Element {
   const { user, ready, authenticated } = usePrivy();
   const router = useRouter();
   const searchParams = useSearchParams()
-  const eth = searchParams.get('eth');
-  const ethAmount = eth ? parseFloat(eth) : 0;
+  const ape = searchParams.get('ape');
+  const apeAmount = ape ? parseFloat(ape) : 0;
   const [sstAmount, setSstAmount] = useState(0);
   const [privyAddress, setPrivyAddress] = useState<string | null>(null);
   const { disconnect } = useDisconnect();
@@ -32,27 +34,29 @@ function App(): JSX.Element {
   const { write: writeContract, isLoading: isMintLoading, isSuccess: isMintSuccess, isError: errorMint } = useContractWrite({
     address: contractAddress,
     abi: SSTABI,
-    functionName: 'mintWithGasTap',
+    functionName: 'mintWithApe',
   });
 
-  const MINT_PRICE_PER_TOKEN = 675000000000000; // 0.000675 ETH in wei
-  const GAS_FEE_PERCENTAGE = 2; // 2%
+  const { write: approveAPE, isLoading: isApproving, isSuccess: isApproveSuccess } = useContractWrite({
+    address: apeContractAddress,
+    abi: SSTABI,
+    functionName: 'approve',
+    args: [contractAddress, ethers.utils.parseUnits((apeAmount * 100).toString(), 'ether')],
+  });
+
+  const MINT_PRICE_PER_TOKEN = 10000000000000000; // 0.01 APE in wei 
 
   // Calculate the number of SST tokens for a given amount of ETH
-  const calculateSST = (eth: number) => {
-    return (eth * 10 ** 18) / MINT_PRICE_PER_TOKEN;
+  const calculateSST = (ape: number) => {
+    return (ape * 10 ** 18) / MINT_PRICE_PER_TOKEN;
   };
 
-  // Calculate the gas fee based on the percentage
-  const calculateGasFee = (eth: number) => {
-    return eth * (GAS_FEE_PERCENTAGE / 100);
-  };
 
   // Update the SST amount when the ETH amount changes
   useEffect(() => {
-    const sst = calculateSST(ethAmount);
+    const sst = calculateSST(apeAmount);
     setSstAmount(sst);
-  }, [ethAmount]);
+  }, [apeAmount]);
 
   useEffect(() => {
     console.log(user, ready, authenticated);
@@ -64,12 +68,19 @@ function App(): JSX.Element {
   useEffect(() => {
     if (isMintSuccess) {
       disconnect();
-      router.push(`/account/stakeETH/stakeStatus?sst=${sstAmount}`);
+      router.push(`/account/stakeAPE/stakeStatus?sst=${sstAmount}`);
     }
   }, [isMintSuccess, router, sstAmount, disconnect]);
 
-  const handleMint = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault() 
+  useEffect(() => {
+    if (isApproveSuccess) {
+      setTimeout(() => {
+        handleMint();
+      }, 5000); 
+    }
+  }, [isApproveSuccess]);
+
+  const handleMint = async () => {
     if (!address) {
       try {
         await open(); // Open the Web3Modal to connect wallet
@@ -78,16 +89,41 @@ function App(): JSX.Element {
       }
     } else {
       try {
-        console.log(contractAddress, SSTABI, ethAmount, privyAddress, parseEther(sstAmount.toString()), parseEther((ethAmount + ethAmount * GAS_FEE_PERCENTAGE / 100).toString()))
+        console.log(contractAddress, SSTABI, apeAmount, privyAddress, parseEther(sstAmount.toString()), parseEther((apeAmount).toString()))
         await writeContract({
           args: [parseEther(sstAmount.toString()), privyAddress],
-          value: parseEther((ethAmount + ethAmount * GAS_FEE_PERCENTAGE / 100).toString())
         });
       } catch (error) {
         console.error("Failed to execute contract write:", error);
       }
     }
   };
+
+  // useEffect(() => {
+  //   const doAsync = async () => {
+  //     if (isApproveSuccess) {
+  //       try {
+  //         console.log(contractAddress, SSTABI, apeAmount, privyAddress, parseEther(sstAmount.toString()), parseEther(apeAmount.toString()));
+  //         await writeContract({
+  //           args: [parseEther(sstAmount.toString()), privyAddress],
+  //         });
+  //       } catch (error) {
+  //         console.error("Failed to execute contract write:", error);
+  //       }
+  //     }
+  //   };
+
+  //   doAsync();
+  // }, [isApproveSuccess]);
+
+  const handleApproveAndMint = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!address) {
+        await open();
+    } else {
+        await approveAPE();
+    }
+};
   
   return (
     <div className="h-full flex justify-start flex-col items-center">
@@ -102,7 +138,7 @@ function App(): JSX.Element {
           />
         </button>
         <h2 className="font-medium leading-Sosh22 text-SoshColorGrey700">
-          Stake ETH
+          Stake APE
         </h2>
       </div>
 
@@ -110,14 +146,14 @@ function App(): JSX.Element {
         <Image
           className="w-auto"
           priority
-          src={"/ETH.svg"}
+          src={"/ape.png"} 
           alt="Blast"
           width={64}
           height={64}
         />
 
         <div className="flex gap-2 text-2xl leading-Sosh22 font-bold text-white">
-        {ethAmount} ETH
+        {apeAmount} APE
         </div>
         <div className="flex items-center gap-2 leading-Sosh22 font-bold text-white">
           <Transfer color="white" />
@@ -129,16 +165,12 @@ function App(): JSX.Element {
       <div className="flex min-w-96 flex-col mb-11 bg-white py-4 px-8 gap-2 items-start rounded-2xl sosh__background border border-SoshColorGrey300">
       <div className="flex justify-between w-full text-SoshColorGrey600">
         <div className="leading-Sosh22 text-black">Amount Total</div>
-        <div className="text-xs text-black leading-Sosh22 ">{ethAmount} ETH</div>
-      </div>
-      <div className="flex justify-between w-full text-SoshColorGrey600">
-        <div className="leading-Sosh22 text-black">Gas for Trading</div>
-        <div className="text-xs text-black leading-Sosh22">{calculateGasFee(ethAmount).toFixed(3)} ETH</div>
+        <div className="text-xs text-black leading-Sosh22 ">{apeAmount} APE</div>
       </div>
       <div className="flex justify-between w-full text-SoshColorGrey600">
         <div className="leading-Sosh22 text-black">Total Cost</div>
         <div className="text-xs text-black leading-Sosh22">
-          {(ethAmount + calculateGasFee(ethAmount)).toFixed(3)} ETH | {sstAmount.toFixed(0)} SST
+          {apeAmount} APE | {sstAmount.toFixed(0)} SST
         </div>
       </div>
       </div>
@@ -160,13 +192,13 @@ function App(): JSX.Element {
       </div>
 
       <div className="w-96">
-      <form onSubmit={handleMint}>
+      <form onSubmit={handleApproveAndMint}>
         <div className="flex flex-col m-auto gap-2">
           <button
             type="submit"
             className={`p-4 w-full rounded-2xl leading-5 text-sm text-white sosh__linear-gradient m-auto`}
           >
-            {isMintLoading ? 'Minting...' : (address ? 'Confirm' : 'Connect Wallet')}
+            {isApproving ? 'Approving...' : (isMintLoading ? 'Minting...' : (address ? 'Confirm' : 'Connect Wallet'))}
           </button>
         </div>
         </form>

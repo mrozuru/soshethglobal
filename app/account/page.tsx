@@ -47,7 +47,7 @@ function App(): JSX.Element {
         <div className="text-white font-bold leading-Sosh22 mb-4">@john254</div>
 
         <div className="flex gap-4 mb-4">
-          <Image alt="" src={"/x.svg"} width={20} height={20} />
+          <Image alt="" src={"/X.svg"} width={20} height={20} />
           <Image alt="" src={"/instagram.svg"} width={20} height={20} />
           <Image alt="" src={"/telegram.svg"} width={20} height={20} />
         </div>

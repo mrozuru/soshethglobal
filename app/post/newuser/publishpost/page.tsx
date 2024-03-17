@@ -30,6 +30,8 @@ function App(): JSX.Element {
   const [previewUrl, setPreviewUrl] = useState<string[] | null | undefined>(
     null
   );
+  const [isUploading, setIsUploading] = useState(false); 
+
 
   const [previewType, setPreviewType] = useState<string | null>(null);
   const { setPostData } = usePostData();
@@ -55,33 +57,19 @@ function App(): JSX.Element {
 
   const handleClick = async () => {
     if (files.length > 0) {
-      const { image, ipfsLink, videoIds } = await uploadPost(files, user!.id);
-      const data = { image, ipfsLink, videoIds, userStory, user, files };
-      console.log(ipfsLink)
-      setPostData(data);
-      // if (files[0].type == "video/mp4") {
-      //   await axios.post("/uploadPost", {
-      //     url: image,
-      //     userId: user?.id,
-      //     story: userStory,
-      //     ipfs: ipfsLink,
-      //     views: [],
-      //     videoIds: videoIds,
-      //   });
-      // } else {
-      //   await axios.post("/uploadPost", {
-      //     url: image,
-      //     userId: user?.id,
-      //     story: userStory,
-      //     ipfs: ipfsLink,
-      //     views: [],
-      //     videoIds: [],
-      //   });
-      // }
-
+      setIsUploading(true); 
+      try {
+        const { image, ipfsLink, videoIds } = await uploadPost(files, user!.id);
+        const data = { image, ipfsLink, videoIds, userStory, user, files };
+        console.log(ipfsLink)
+        setPostData(data);
+        setIsUploading(false); 
+        push("/post/users/confirmCCT");
+      } catch (error) {
+        console.error("Error uploading to IPFS:", error);
+        setIsUploading(false); 
+      }
     }
-
-    push("/post/users/confirmCCT");
   };
 
   const handleRemoveImage = (index: number) => {
@@ -172,7 +160,7 @@ function App(): JSX.Element {
                     <ReactPlayer
                       width="300px"
                       height="200px"
-                      url={preview || "/ProfilePic.svg"}
+                      url={preview || "/profilePic.svg"}
                       playing={false}
                       controls={true}
                       // light is usefull incase of dark mode
@@ -184,7 +172,7 @@ function App(): JSX.Element {
                     <Image
                       priority={true}
                       className="rounded-lg"
-                      src={preview || "/ProfilePic.svg"}
+                      src={preview || "/profilePic.svg"}
                       width={320}
                       height={192}
                       alt="uploaded picture"
@@ -228,7 +216,7 @@ function App(): JSX.Element {
                   // disabled={disableButton}
                   className="px-8 py-2 text-xs text-white font-bold leading-5 sosh__linear-gradient rounded-lg"
                 >
-                  Purchase
+                  {isUploading ? 'Uploading...' : 'Next'}
                 </button>
               </div>
             </div>
