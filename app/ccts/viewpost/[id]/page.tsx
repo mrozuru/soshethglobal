@@ -133,7 +133,7 @@ function App(): JSX.Element {
             <div>
               <div className="absolute left-0 w-full flex justify-between px-4 py-5 z-20 h-auto">
                 <button onClick={() => setShowHoldersModal(true)}>
-                  <FacePile faces={faces} width={60} height={60} />
+                  <FacePile faces={faces} />
                 </button>
                 <div className="flex gap-4">
                   <Image
@@ -257,11 +257,7 @@ function App(): JSX.Element {
                       />
                     </button>
                   </div>
-
-                  <div
-                    className="flex justify-between px-4"
-                    onClick={() => router.push("account/otherAccount")}
-                  >
+                  <div className="flex justify-between px-4">
                     <div className="flex gap-4 justify-center text-SoshColorGrey700 items-center">
                       <div>
                         <Image
@@ -278,11 +274,7 @@ function App(): JSX.Element {
                       Holding 1 CCTs
                     </div>
                   </div>
-
-                  <div
-                    className="flex justify-between px-4"
-                    onClick={() => router.push("account/otherAccount")}
-                  >
+                  <div className="flex justify-between px-4">
                     <div className="flex gap-4 justify-center items-center">
                       <div>
                         <Image
@@ -416,7 +408,7 @@ function App(): JSX.Element {
 
                     <div>
                       <button
-                        onClick={() => router.push("/ccts/purchaseCCT/status")}
+                        onClick={() => router.push("/account/assetstatus")}
                         className="w-full font-bold px-16 py-4 sosh__linear-gradient text-white rounded-2xl"
                       >
                         Confirm

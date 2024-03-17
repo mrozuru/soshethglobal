@@ -43,7 +43,7 @@ function App(): JSX.Element {
         </div>
         <div className="text-sm flex gap-2 font-normal leading-Sosh22 text-SoshColorGrey500">
           <Transfer color="#667085" />
-          <div>0.1 ETH = 2000 SST</div>
+          <div>0.1 ETH = 148 SST</div>
         </div>
       </div>
 
@@ -62,7 +62,7 @@ function App(): JSX.Element {
         </div>
         <div className="text-sm flex gap-2 font-normal leading-Sosh22 text-SoshColorGrey500">
           <Transfer color="#667085" />
-          <div>0.1 ETH = 2000 SST</div>
+          <div>0.1 ETH = 148 SST</div>
         </div>
       </div>
 

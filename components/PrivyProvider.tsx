@@ -23,6 +23,9 @@ export default function PrivyProviderWrapper({
           logo: "https://pub-dc971f65d0aa41d18c1839f8ab426dcb.r2.dev/privy.png",
         },
         loginMethods: ["email", "apple", "google", "twitter"],
+        embeddedWallets: {
+          createOnLogin: 'all-users' 
+        }
       }}
     >
       {children}

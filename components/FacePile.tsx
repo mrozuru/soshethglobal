@@ -9,11 +9,9 @@ interface Face {
 
 interface Props {
   faces: Face[];
-  width: number;
-  height: number;
 }
 
-const FacePile: React.FC<Props> = ({ faces, width, height }) => {
+const FacePile: React.FC<Props> = ({ faces }) => {
   return (
     <div className="flex items-center">
       {faces.map((face, index) => (
@@ -21,8 +19,8 @@ const FacePile: React.FC<Props> = ({ faces, width, height }) => {
           <Image
             src={face.imgUrl}
             alt={face.name}
-            width={width}
-            height={height}
+            width={60}
+            height={60}
             className={`rounded-full shadow-md`}
           />
         </div>

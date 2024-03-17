@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import PrivyProviderWrapper from "@/components/PrivyProvider";
+import { Web3ModalProvider } from '../context/Web3Modal';
 import RouteGuard from "@/components/RouteGuard";
 
 const poppins = Poppins({
@@ -26,7 +27,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.className}>
         <PrivyProviderWrapper>
+        <Web3ModalProvider>
           <RouteGuard>{children}</RouteGuard>
+          </Web3ModalProvider>
         </PrivyProviderWrapper>
       </body>
     </html>

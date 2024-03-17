@@ -10,24 +10,24 @@ interface Option {
   image: string;
 }
 
-const options: Option[] = [
-  {
-    label: "Coinbase",
-    image: "/coinbase.svg",
-  },
-  {
-    label: "Metamask",
-    image: "/metamask.svg",
-  },
-  {
-    label: "Binance",
-    image: "/binance.svg",
-  },
-  {
-    label: "Trust",
-    image: "/trust.svg",
-  },
-];
+// const options: Option[] = [
+//   {
+//     label: "Coinbase",
+//     image: "/coinbase.svg",
+//   },
+//   {
+//     label: "Metamask",
+//     image: "/metamask.svg",
+//   },
+//   {
+//     label: "Binance",
+//     image: "/binance.svg",
+//   },
+//   {
+//     label: "Trust",
+//     image: "/trust.svg",
+//   },
+// ];
 
 function App(): JSX.Element {
   const router = useRouter();
@@ -59,7 +59,7 @@ function App(): JSX.Element {
         <h2 className="font-medium leading-Sosh22">Stake ETH</h2>
       </div>
 
-      <div className="relative w-96 mx-auto mb-8 max-w-md">
+      {/* <div className="relative w-96 mx-auto mb-8 max-w-md">
         <div className="dropdown">
           <div
             className="dropdown-toggle items-center text-sm font-medium leading-Sosh22 bg-white flex px-8 gap-2 py-4 w-full border rounded-3xl border-SoshColorGrey300"
@@ -114,7 +114,7 @@ function App(): JSX.Element {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="flex flex-col gap-2 w-96 mb-10">
         <div className="flex items-center px-8 text-sm font-medium leading-Sosh22 bg-white gap-2 py-4 w-full border rounded-3xl border-SoshColorGrey300 select-none">
@@ -141,7 +141,7 @@ function App(): JSX.Element {
           >
             Connect
           </button>
-          <div className="text-center text-SoshColorGrey600 text-sm leading-Sosh22">
+          {/* <div className="text-center text-SoshColorGrey600 text-sm leading-Sosh22">
             Or
           </div>
           <button
@@ -151,7 +151,7 @@ function App(): JSX.Element {
             }
           >
             Prefer not to say
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

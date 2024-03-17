@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 
-const Overview = () => {
+const Card = () => {
   const router = useRouter();
 
   return (
@@ -38,7 +38,7 @@ const Overview = () => {
         <div className="flex w-full px-4 justify-between">
           <button
             onClick={() => router.push("/account/stakeETH")}
-            className="px-8 text-sm leading-Sosh22 py-2 sosh__linear-gradient text-white rounded-lg"
+            className="px-8 text-sm leading-Sosh22 py-2 bg-black text-white rounded-lg"
           >
             Stake
           </button>
@@ -49,7 +49,9 @@ const Overview = () => {
             Withdraw
           </button>
         </div>
-        <div className="w-full text-sm text-center text-SoshColorGrey600 leading-Sosh22">
+        <div 
+          onClick={() => router.push("/account/transaction")}
+          className="w-full text-sm text-center text-SoshColorGrey600 leading-Sosh22">
           Transaction History
         </div>
       </div>
@@ -64,4 +66,4 @@ const Overview = () => {
   );
 };
 
-export default Overview;
+export default Card;
