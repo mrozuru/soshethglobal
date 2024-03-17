@@ -1,0 +1,102 @@
+{
+	"compiler": {
+		"version": "0.8.24+commit.e11b9ed9"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "x",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint8",
+						"name": "a",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint8",
+						"name": "b",
+						"type": "uint8"
+					}
+				],
+				"name": "fraxExp",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "ans",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "x",
+						"type": "uint256"
+					}
+				],
+				"name": "sqrt",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "ans",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "provides some functions for maths that are illegal under solidity rules",
+			"kind": "dev",
+			"methods": {
+				"fraxExp(uint256,uint8,uint8)": {
+					"details": "estimates the equation f(x) = x^(a/b)^ does so by calculating subtotal x^a^ and iterating to the b-root of that subtotal using a generalized form of the Babylonian Method (rounded down to nearest whole #) https://www.researchgate.net/publication/237415858_EXTENDING_THE_BABYLONIAN_ALGORITHM e NOTE: greater inputs could be considered if this function were used to estimate exponential mappings with a limited number of sig-figs"
+				},
+				"sqrt(uint256)": {
+					"details": "estimates the square root of an input using Babylonian Method (not much more performant on large numbers, due to lack of tight est bounding) https://www.cs.utep.edu/vladik/2009/olg09-05a.pdf"
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"sosh/FuzzMath.sol": "FuzzyMath"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"sosh/FuzzMath.sol": {
+			"keccak256": "0x2fae14d80f16865daece3616a17235e0ea86be2a6b19f0bb05e4d7060b1a71de",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://3c57682bd999d8846b065321619b01e7bc5f3cde7d1691477cc3d4fdb4d81d69",
+				"dweb:/ipfs/QmUEEZQY9FhDmsCbHT54rXQYzvFAATbPcRF3P9izsJZBHm"
+			]
+		}
+	},
+	"version": 1
+}
