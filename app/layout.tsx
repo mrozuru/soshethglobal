@@ -4,6 +4,7 @@ import "./globals.css";
 import PrivyProviderWrapper from "@/components/PrivyProvider";
 import { Web3ModalProvider } from '../context/Web3Modal';
 import RouteGuard from "@/components/RouteGuard";
+import { PostDataProvider } from '@/context/PostDataContext';
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -28,7 +29,9 @@ export default function RootLayout({
       <body className={poppins.className}>
         <PrivyProviderWrapper>
         <Web3ModalProvider>
+        <PostDataProvider> 
           <RouteGuard>{children}</RouteGuard>
+        </PostDataProvider>
           </Web3ModalProvider>
         </PrivyProviderWrapper>
       </body>

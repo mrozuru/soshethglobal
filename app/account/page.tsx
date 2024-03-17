@@ -15,18 +15,12 @@ function App(): JSX.Element {
 
   return (
     <div>
-      <div className="relative pl-9 flex flex-col sosh__linear-gradient mb-11 w-full">
-        <div className="flex mb-3 w-full items-center">
-          <Image
-            alt=""
-            src={"/smilingFace.svg"}
-            width={72}
-            height={72}
-            className="w-20 mr-8"
-          />
+      <div className="relative px-8 pt-9 flex flex-col sosh__linear-gradient mb-4 w-full">
+        <div className="flex mb-3 w-full items-center justify-between">
+          <Image alt="" src={"/profilePic.svg"} width={72} height={72} />
           <div
             onClick={() => setShowFollowModal(true)}
-            className="flex flex-col text-white items-center mr-5"
+            className="flex flex-col text-white items-center"
           >
             <div className="text-sm font-bold">20</div>
             <div className="text-sm">Following</div>
@@ -34,7 +28,7 @@ function App(): JSX.Element {
 
           <div
             onClick={() => setShowFollowModal(true)}
-            className="flex flex-col text-white items-center mr-10"
+            className="flex flex-col text-white items-center"
           >
             <div className="text-sm font-bold">30</div>
             <div className="text-sm">Followers</div>
@@ -63,7 +57,7 @@ function App(): JSX.Element {
           full of curiosity
         </div>
       </div>
-      <div className="flex justify-between w-full items-start px-16 mb-6">
+      <div className="flex justify-between w-full items-start px-10 mb-6">
         <button
           onClick={() => setActiveTab("Overview")}
           className={`px-8 py-2 text-xs font-[425] leading-5 ${

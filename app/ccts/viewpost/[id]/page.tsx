@@ -7,6 +7,7 @@ import { useRouter, useParams } from "next/navigation";
 import { axios } from "@/lib";
 import Loading from "@/app/loading";
 import { Pagination } from "swiper/modules";
+import VideoPlayer from "@/app/ccts/component/VideoPlayer";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -29,6 +30,7 @@ interface data {
   likes: string[];
   _id: string;
   views: number;
+  videoIds?: string[]; // Add this line
 }
 
 function App(): JSX.Element {
@@ -52,6 +54,8 @@ function App(): JSX.Element {
     { id: 2, name: "Alice", imgUrl: "/exampleUser2.svg" },
     { id: 3, name: "Bob", imgUrl: "/exampleUser3.svg" },
   ];
+
+  const [useVideo, setUseVideo] = useState(false);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -133,7 +137,7 @@ function App(): JSX.Element {
             <div>
               <div className="absolute left-0 w-full flex justify-between px-4 py-5 z-20 h-auto">
                 <button onClick={() => setShowHoldersModal(true)}>
-                  <FacePile faces={faces} />
+                  <FacePile faces={faces} width={60} height={60} />
                 </button>
                 <div className="flex gap-4">
                   <Image
@@ -162,17 +166,29 @@ function App(): JSX.Element {
                 className="mySwiper relative w-full h-72"
               >
                 {data &&
-                  data.url.map((image, idx) => (
-                    <SwiperSlide key={idx}>
-                      <Image
-                        alt="postImage"
-                        src={image}
-                        width={1400}
-                        height={1800}
-                        className="w-full bg-cover min-h-72"
-                      />
-                    </SwiperSlide>
-                  ))}
+                  data.url.map((image, idx) => {
+                    // useVideo && data.videoIds.length > 0
+                    if (useVideo && (data.videoIds?.length ?? 0) > 0) {
+                      return (
+                        <SwiperSlide key={idx}>
+                          <VideoPlayer video_id={data.videoIds} />
+                        </SwiperSlide>
+                      )
+                    } else {
+                      return (
+                        <SwiperSlide key={idx}>
+                          <Image
+                            alt="postImage"
+                            src={image}
+                            width={200}
+                            height={0}
+                            className="w-full bg-cover h-auto"
+                          />
+                        </SwiperSlide>
+                      )
+                    }
+
+                  })}
                 <div className="absolute bg-transparent z-10 gap-4 bottom-0 w-full flex justify-between py-4 px-4 items-center text-white text-sm leading-Sosh22">
                   <p className="text-base">1 Certi | $3490 </p>
                   <div className="flex items-center gap-1">
@@ -209,7 +225,15 @@ function App(): JSX.Element {
                   </div>
                 </div>
               </Swiper>
-
+              {/* {if (data.videoIds.length > 0)} */}
+              {/* <button
+                onClick={() => {
+                  console.log("eeeeeeeeeeeee");
+                  setUseVideo(true);
+                }}
+              >
+                Play
+              </button> */}
               <button
                 onClick={() => setShowCCTModal(true)}
                 className="flex w-full justify-center py-3 px-4 text-white font-bold leading-Sosh22"
@@ -257,7 +281,11 @@ function App(): JSX.Element {
                       />
                     </button>
                   </div>
-                  <div className="flex justify-between px-4">
+
+                  <div
+                    className="flex justify-between px-4"
+                    onClick={() => router.push("account/otherAccount")}
+                  >
                     <div className="flex gap-4 justify-center text-SoshColorGrey700 items-center">
                       <div>
                         <Image
@@ -274,7 +302,11 @@ function App(): JSX.Element {
                       Holding 1 CCTs
                     </div>
                   </div>
-                  <div className="flex justify-between px-4">
+
+                  <div
+                    className="flex justify-between px-4"
+                    onClick={() => router.push("account/otherAccount")}
+                  >
                     <div className="flex gap-4 justify-center items-center">
                       <div>
                         <Image
@@ -320,22 +352,20 @@ function App(): JSX.Element {
                   <div className="p-4">
                     <div className="shadow mb-4 w-full relative inline-flex rounded-2xl bg-white cursor-pointer select-none items-center font-bold text-sm">
                       <div
-                        className={`flex items-center justify-center w-1/2 rounded-2xl py-3 w-60% text-sm font-medium ${
-                          option === "Buy"
+                        className={`flex items-center justify-center w-1/2 rounded-2xl py-3 w-60% text-sm font-medium ${option === "Buy"
                             ? "text-white sosh__linear-gradient"
                             : "text-body-color"
-                        }`}
+                          }`}
                         onClick={() => setOption("Buy")}
                       >
                         Buy
                       </div>
                       <div
                         onClick={() => setOption("Sell")}
-                        className={`flex items-center justify-center w-1/2 rounded-2xl py-3 w-60% text-sm font-medium ${
-                          option === "Sell"
+                        className={`flex items-center justify-center w-1/2 rounded-2xl py-3 w-60% text-sm font-medium ${option === "Sell"
                             ? "text-white sosh__linear-gradient"
                             : "text-body-color"
-                        }`}
+                          }`}
                       >
                         Sell
                       </div>
@@ -408,7 +438,7 @@ function App(): JSX.Element {
 
                     <div>
                       <button
-                        onClick={() => router.push("/account/assetstatus")}
+                        onClick={() => router.push("/ccts/purchaseCCT/status")}
                         className="w-full font-bold px-16 py-4 sosh__linear-gradient text-white rounded-2xl"
                       >
                         Confirm

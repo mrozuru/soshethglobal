@@ -4,14 +4,19 @@ import React from "react";
 import Image from "next/image";
 
 import { useRouter } from "next/navigation";
+import { useSearchParams } from 'next/navigation'
 
 function App(): JSX.Element {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const sstParam = searchParams.get('sst');
+  const sst = parseFloat(sstParam || '0').toFixed(2);
+
 
   return (
     <div className="h-full flex justify-start flex-col items-center">
       <div className="mt-8 mb-16">
-        <button className="absolute left-4" onClick={() => router.back()}>
+        {/* <button className="absolute left-4" onClick={() => router.back()}>
           <Image
             priority={true}
             src={"/BackArrowStatus.svg"}
@@ -19,7 +24,7 @@ function App(): JSX.Element {
             height={24}
             alt="back arrow"
           />
-        </button>
+        </button> */}
         <h2 className="font-medium leading-Sosh22 text-SoshColorGrey700">
           Stake status
         </h2>
@@ -40,7 +45,7 @@ function App(): JSX.Element {
           Success
         </div>
         <div className="text-SoshColorGreyScale text-sm font-normal leading-Sosh22 text-center">
-          Your CCT asset purchase is successful. Share your post and start to
+          Your {sst} SST purchase is successful. Share or trade post and start to
           earn now.
         </div>
       </div>

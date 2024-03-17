@@ -128,7 +128,6 @@ const LeaderBoard = () => {
                   </div>
                 </div>
               </div>
-              ;
               {showHoldersModal && (
                 <div className="fixed inset-0 z-[200] bg-gray-600 bg-opacity-10 overflow-y-auto h-full w-full flex items-center justify-center">
                   <div className="py-8 px-2 w-360 border shadow-lg rounded-2xl bg-white">

@@ -1,12 +1,51 @@
 "use client";
 
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Image from "next/image";
 
 import { useRouter } from "next/navigation";
+import { usePrivy } from "@privy-io/react-auth";
+import { useContractRead } from 'wagmi';
+import SSTABI from '../../../../contracts/SST.json'; 
+import { BigNumber } from 'ethers'; 
+import { formatUnits } from 'ethers/lib/utils'; 
+
+const contractAddress = '0x593600A2531869C4a493AB62065336AcD843849E'; 
+
 
 function App(): JSX.Element {
   const router = useRouter();
+  const { user, ready, authenticated } = usePrivy();
+  const [privyAddress, setPrivyAddress] = useState<string>('null');
+  const [sstBalance, setSSTBalance] = useState('');
+
+  const { data: sstBalanceData } = useContractRead({
+    address: contractAddress,
+    abi: SSTABI,
+    functionName: 'balanceOf',
+    args: [privyAddress], 
+    watch: true, 
+  });
+  useEffect(() => {
+    if (sstBalanceData) {
+      setSSTBalance(numberWithCommas(parseInt(formatUnits(sstBalanceData as BigNumber, 18)).toFixed(0).toString()));
+    }
+  }, [sstBalanceData]);
+
+  useEffect(() => {
+    console.log(user, ready, authenticated);
+    if (ready && authenticated && user) {
+      setPrivyAddress(user.wallet?.address ?? ''); 
+    }
+  }, [user, ready, authenticated]);
+
+  function numberWithCommas(x: String) {
+    return x.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  const formatAccountAddress = (address: string): string => {
+    return address.length > 0 ? `${address.slice(0, 5)}...${address.slice(-3)}` : address;
+  }
 
   return (
     <div className="h-full flex justify-start flex-col items-center">
@@ -30,7 +69,7 @@ function App(): JSX.Element {
           <div className="flex justify-start gap-4 items-start">
             <Image
               alt="blast"
-              src={"/BlastNetworkIcon.svg"}
+              src={"/profilePic.svg"}
               width={24}
               height={24}
               className="pt-1"
@@ -39,8 +78,8 @@ function App(): JSX.Element {
           </div>
           <div>=</div>
           <div className="flex flex-col gap-4 items-end">
-            <div>200 SST</div>
-            <div className="text-sm leading-Sosh22">200 USD</div>
+            <div>1 SST</div>
+            {/* <div className="text-sm leading-Sosh22">200 USD</div> */}
           </div>
         </div>
       </div>
@@ -49,8 +88,8 @@ function App(): JSX.Element {
         <div className="leading-Sosh22 text-sm font-medium flex justify-between w-full">
           <div>Wallet Balance</div>
           <div className="flex flex-col items-end gap-4">
-            <div>0x3asax...21hx1</div>
-            <div className="text-SoshColorGrey700"> 2,140 SST | $2,140</div>
+            <div>{formatAccountAddress(privyAddress)}</div>
+            <div className="text-SoshColorGrey700"> {sstBalance} SST</div>
           </div>
         </div>
       </div>

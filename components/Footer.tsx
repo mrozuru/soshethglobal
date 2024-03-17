@@ -22,7 +22,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="fixed z-[70] left-0 bottom-0 w-full flex px-8 py-2 justify-between items-center bg-[#f2efe8] h-[10vh]">
+    <footer className="fixed z-[101] left-0 bottom-0 w-full flex px-8 py-2 justify-between items-center bg-[#f2efe8] h-[10vh]">
       <button
         className="flex flex-col items-center justify-center gap-1"
         onClick={() => handleChange("ccts")}

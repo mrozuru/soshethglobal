@@ -12,7 +12,7 @@ import { parseEther } from 'viem'
 import { usePrivy } from "@privy-io/react-auth";
 
 import { useAccount, useContractWrite } from 'wagmi';
-import SSTABI from '../../../../contracts/SST.json'; // Adjust the path to where your ABI is located
+import SSTABI from '../../../../contracts/SST.json'; 
 
 const contractAddress = '0x593600A2531869C4a493AB62065336AcD843849E';
 
@@ -28,7 +28,7 @@ function App(): JSX.Element {
 
   const { address } = useAccount();
   const { open } = useWeb3Modal();
-  const { data: hash, write: writeContract } = useContractWrite({
+  const { write: writeContract, isLoading: isMintLoading, isSuccess: isMintSuccess, isError: errorMint } = useContractWrite({
     address: contractAddress,
     abi: SSTABI,
     functionName: 'mintWithGasTap',
@@ -59,6 +59,12 @@ function App(): JSX.Element {
       setPrivyAddress(user.wallet?.address ?? null); // If address is undefined, set privyAddress to null
     }
   }, [user, ready, authenticated]);
+
+  useEffect(() => {
+    if (isMintSuccess) {
+      router.push(`/account/stakeETH/stakeStatus?sst=${sstAmount}`);
+    }
+  }, [isMintSuccess, router, sstAmount]);
 
   const handleMint = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault() 
@@ -144,7 +150,10 @@ function App(): JSX.Element {
             alt="Blast"
             src={"/base-logo-in-blue.svg"}
           />
-          Base Network
+          <div className="flex flex-row justify-between w-80">
+            <div>Base Network</div>
+            <div className="text-green-500">{address ? 'Connected' : ''}</div>
+          </div>
         </div>
       </div>
 
@@ -153,9 +162,9 @@ function App(): JSX.Element {
         <div className="flex flex-col m-auto gap-2">
           <button
             type="submit"
-            className={`p-4 w-full rounded-2xl leading-5 text-sm text-white sosh__linear-gradient`}
+            className={`p-4 w-full rounded-2xl leading-5 text-sm text-white sosh__linear-gradient m-auto`}
           >
-            {address ? 'Confirm' : 'Connect Wallet'}
+            {isMintLoading ? 'Minting...' : (address ? 'Confirm' : 'Connect Wallet')}
           </button>
         </div>
         </form>

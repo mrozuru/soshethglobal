@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Heart from "@/components/heart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Pagination } from "swiper/modules";
 
@@ -15,6 +15,7 @@ import "swiper/css/effect-cards";
 
 // import required modules
 import { EffectCards } from "swiper/modules";
+import FacePile from "@/components/FacePile";
 
 interface data {
   data: {
@@ -31,9 +32,16 @@ interface data {
 
 const Card = ({ data }: data) => {
   const [option, setOption] = useState<string>("Buy");
-  const [like, setLike] = useState<boolean>(false);
   const [cctAmount, setCctAmount] = useState<number>(1);
-  const [showPurchase, setShowPurchase] = useState<number>();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [postLiked, setPostLiked] = useState<boolean | undefined>();
+  const [showHoldersModal, setShowHoldersModal] = useState<boolean>(false);
+
+  const faces = [
+    { id: 1, name: "John", imgUrl: "/exampleUser1.svg" },
+    { id: 2, name: "Alice", imgUrl: "/exampleUser2.svg" },
+    { id: 3, name: "Bob", imgUrl: "/exampleUser3.svg" },
+  ];
 
   const handleDecreaseCCTs = () => {
     if (cctAmount === 0) {
@@ -49,14 +57,26 @@ const Card = ({ data }: data) => {
       {data.map((cardDetail, idx) => {
         return (
           <div key={idx}>
-            <div className="flex flex-col items-center mx-4 mb-8 rounded-3xl bg-green-900">
-              <div
-                className={`${
-                  showPurchase === idx
-                    ? "transition-opacity duration-100 opacity-0 absolute pointer-events-none"
-                    : "block w-full overflow-x-hidden"
-                }`}
-              >
+            <div className="flex flex-col items-center mx-4 mb-8 rounded-3xl sosh__linear-gradient">
+              <div className="block relative w-full overflow-x-hidden">
+                <div>
+                  <div>
+                    <div className="absolute top-0 left-0 w-full flex justify-between px-4 py-5 z-50 h-auto">
+                      <button onClick={() => setShowHoldersModal(true)}>
+                        <FacePile faces={faces} width={60} height={60} />
+                      </button>
+                      <div className="flex gap-4">
+                        <Image
+                          alt="share"
+                          src={"/share.svg"}
+                          width={24}
+                          height={24}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="relative">
                   <div
                     onClick={() =>
@@ -70,180 +90,271 @@ const Card = ({ data }: data) => {
                       modules={[Pagination, EffectCards]}
                       effect={"cards"}
                       grabCursor={true}
-                      className="mySwiper overflow-x-hidden"
+                      className="mySwiper rounded-3xl"
                     >
                       {cardDetail &&
                         cardDetail.url.map((image, idx) => (
-                          <SwiperSlide
-                            className="w-[95%] rounded-3xl"
-                            key={idx}
-                          >
+                          <SwiperSlide key={idx}>
                             <Image
                               priority={true}
                               src={image}
                               width={400}
-                              height={280}
-                              alt="Image"
-                              className="rounded-3xl justify-center min-h-[280px]"
+                              height={400}
+                              alt="Images"
+                              className="rounded-3xl min-h-72"
                             />
                           </SwiperSlide>
                         ))}
                     </Swiper>
-                  </div>
 
-                  <button>
-                    <Image
-                      alt="holders"
-                      src={"/holders.svg"}
-                      width={84}
-                      height={60}
-                      className="absolute z-50 left-4 top-5"
-                    />
-                  </button>
+                    <div className="absolute bg-transparent pointer-events-none z-50 gap-4 bottom-0 w-full flex justify-between py-4 px-4 items-center text-white text-sm leading-Sosh22">
+                      <p className="text-base">1 Certi | $3490 </p>
+                      <div className="flex items-center justify-center gap-4">
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() =>
+                              setPostLiked((prev) =>
+                                prev !== undefined ? !prev : false
+                              )
+                            }
+                          >
+                            <Heart
+                              active={postLiked || false}
+                              comment={false}
+                            />
+                          </button>
+                          <p>90</p>
+                        </div>
 
-                  <div className="absolute w-full bottom-0 filter backdrop-blur-md z-50  rounded-b-3xl bg-gradient-to-b from-transparent via-transparent to-black bg">
-                    <div className="flex justify-between py-5 px-4 items-center text-white text-sm font-bold leading-Sosh22">
-                      <p className="text-center">1 CCT 20 SST $3490</p>
-                      <div className="flex gap-5">
-                        <button onClick={() => setLike((prev) => !prev)}>
-                          <Heart active={like} comment={false} />
-                        </button>
-                        <div>
+                        <div className="flex items-center gap-1">
                           <Image
                             alt=""
                             src={"/annotationDots.svg"}
                             width={26}
                             height={26}
+                            className="h-auto"
                           />
+                          <p>910</p>
                         </div>
-                        <div>
+                        <div className="flex items-center gap-1">
                           <Image
                             alt=""
-                            src={"/share.svg"}
+                            src={"/barChart.svg"}
                             width={26}
                             height={26}
+                            className="h-auto"
                           />
+                          <p>2M</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
                 <div
-                  onClick={() => setShowPurchase(idx)}
-                  className="flex justify-center py-6 px-5 text-white text-sm font-bold leading-5"
+                  onClick={() => setShowModal(true)}
+                  className="flex justify-center py-4 px-5 text-white text-sm font-bold leading-5"
                 >
-                  Content Certification Token
-                </div>
-              </div>
-
-              <div
-                className={`${
-                  showPurchase === idx
-                    ? "transition-opacity duration-100 opacity-100"
-                    : "transition-opacity duration-100 opacity-0 absolute pointer-events-none"
-                } + w-full`}
-              >
-                <div className="p-4">
-                  <div className="shadow mb-4 w-full relative inline-flex rounded-2xl cursor-pointer select-none items-center font-bold text-sm bg-SoSHColorDisabled">
-                    <div
-                      className={`flex items-center justify-center w-1/2 rounded-2xl py-3 w-60% text-sm font-bold ${
-                        option === "Buy"
-                          ? "text-primary bg-white"
-                          : "text-body-color"
-                      }`}
-                      onClick={() => setOption("Buy")}
-                    >
-                      Buy
-                    </div>
-                    <div
-                      onClick={() => setOption("Sell")}
-                      className={`flex items-center justify-center w-1/2 rounded-2xl py-3 w-60% text-sm font-bold ${
-                        option === "Sell"
-                          ? "text-primary bg-white"
-                          : "text-body-color"
-                      }`}
-                    >
-                      Sell
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between p-2 mb-6">
-                    <div className="flex flex-col gap-3">
-                      <div className="text-white text-sm leading-5 font-bold">
-                        My Balance
-                      </div>
-                      <div className="flex gap-2 items-end">
-                        <span className="text-white text-2xl leading-5 font-bold">
-                          $3490
-                        </span>
-                        <span className="text-white text-[10px] font-bold text-end leading-[14px]">
-                          20 SST
-                        </span>
-                      </div>
-                      <div className="text-white text-sm leading-5 font-bold">
-                        My Holdings 0
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <div className="text-white text-sm leading-5">
-                        0x27a1...718sgja
-                      </div>
-                      <div className="text-white text-sm leading-5">
-                        Asset ID: UXS123
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex rounded-[14px] justify-between p-2 mb-3 bg-white bg-opacity-10">
-                    <button
-                      onClick={handleDecreaseCCTs}
-                      className="flex px-4 py-3 rounded-[14px] bg-white font-bold leading-5 text-sm"
-                    >
-                      -
-                    </button>
-                    <div className="flex flex-col justify-center items-center">
-                      <span className="text-white text-2xl leading-5 font-bold">
-                        {cctAmount}
-                      </span>
-                      <span className="text-white text-[10px] font-bold text-end leading-[14px]">
-                        CCT
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => setCctAmount((prev) => prev + 1)}
-                      className="flex px-4 py-3 rounded-2xl bg-white font-bold leading-5 text-sm"
-                    >
-                      +
-                    </button>
-                  </div>
-
-                  <div className="flex justify-between p-2 mb-6">
-                    <div className="flex flex-col gap-3">
-                      <div className="text-white text-sm leading-5 font-bold">
-                        Total Cost
-                      </div>
-                      <div className="flex gap-2 items-end">
-                        <span className="text-white text-2xl leading-5 font-bold">
-                          $0
-                        </span>
-                        <span className="text-white text-[10px] font-bold text-end leading-[14px]">
-                          0 SST
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <button
-                      onClick={() => router.push("/ccts/purchaseCCT")}
-                      className="w-full font-bold px-16 py-4 bg-green-200 text-gray-800 rounded-2xl hover:bg-gray-400 transition duration-300 ease-in-out"
-                    >
-                      Confirm
-                    </button>
-                  </div>
+                  Trade To Earn
                 </div>
               </div>
             </div>
+
+            {showModal && (
+              <div
+                className={
+                  "fixed inset-0 z-[71] bg-gray-600 bg-opacity-15 overflow-y-auto h-full w-full flex items-center justify-center"
+                }
+              >
+                <div className="py-8 px-2 w-96 border rounded-3xl sosh__linear-gradient3">
+                  <div className="flex flex-col">
+                    <div className="flex justify-end px-8">
+                      <button onClick={() => setShowModal(false)}>
+                        <Image
+                          alt="close icon"
+                          src={"/closeIcon.svg"}
+                          width={24}
+                          height={24}
+                          className="h-auto"
+                        />
+                      </button>
+                    </div>
+                    <div className="p-4">
+                      <div className="shadow mb-4 w-full relative inline-flex rounded-2xl bg-white cursor-pointer select-none items-center font-bold text-sm">
+                        <div
+                          className={`flex items-center justify-center w-1/2 rounded-2xl py-3 w-60% text-sm font-medium ${
+                            option === "Buy"
+                              ? "text-white sosh__linear-gradient"
+                              : "text-body-color"
+                          }`}
+                          onClick={() => setOption("Buy")}
+                        >
+                          Buy
+                        </div>
+                        <div
+                          onClick={() => setOption("Sell")}
+                          className={`flex items-center justify-center w-1/2 rounded-2xl py-3 w-60% text-sm font-medium ${
+                            option === "Sell"
+                              ? "text-white sosh__linear-gradient"
+                              : "text-body-color"
+                          }`}
+                        >
+                          Sell
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between p-2 mb-4">
+                        <div className="flex flex-col gap-8">
+                          <div className="text-SoshColorGrey600 leading-5 font-medium">
+                            My Balance
+                          </div>
+                          <div className="flex gap-2 text-SoshColorGrey600 text-2xl leading-5 items-end">
+                            $3490
+                          </div>
+                          <div className="text-SoshColorGrey600 text-sm leading-5 font-medium">
+                            My Holdings
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-8 items-end">
+                          <div className="text-SoshColorGrey500 text-sm leading-5">
+                            0x27a1...718sgja
+                          </div>
+                          <div className="text-SoshColorGrey600 text-sm leading-5">
+                            Asset ID: UXS123
+                          </div>
+                          <div className="text-SoshColorGrey600 text-sm leading-5">
+                            0
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex rounded-2xl justify-between p-2 mb-4 bg-white bg-opacity-30">
+                        <button
+                          onClick={handleDecreaseCCTs}
+                          className="flex px-4 py-3 rounded-xl bg-white font-bold leading-5 text-sm"
+                        >
+                          -
+                        </button>
+                        <div className="flex flex-col justify-center items-center">
+                          <span className="text-SoshColorGrey500 text-2xl leading-5 font-bold">
+                            {cctAmount}
+                          </span>
+                          <span className="text-SoshColorGrey500 text-xs text-end leading-rounded-xl">
+                            CCT
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => setCctAmount((prev) => prev + 1)}
+                          className="flex px-4 py-3 rounded-2xl bg-white font-bold leading-5 text-sm"
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <div className="flex justify-between p-2 mb-6">
+                        <div className="flex flex-col gap-2">
+                          <div className="text-SoshColorGrey600 leading-Sosh22 font-medium">
+                            Total Cost
+                          </div>
+                          <div className="flex gap-4 items-center">
+                            <span className="text-SoshColorGrey600 text-2xl leading-Sosh22">
+                              $2000
+                            </span>
+                            <span className="text-SoshColorGrey600 font-medium leading-Sosh22">
+                              20 SST
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <button
+                          onClick={() =>
+                            router.push("/ccts/purchaseCCT/status")
+                          }
+                          className="w-full font-bold px-16 py-4 sosh__linear-gradient text-white rounded-2xl"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showHoldersModal && (
+              <div className="fixed inset-0 z-[71] bg-gray-600 bg-opacity-10 overflow-y-auto h-full w-full flex items-center justify-center">
+                <div className="py-8 px-2 w-360 border shadow-lg rounded-2xl bg-white">
+                  <div className="flex flex-col gap-8">
+                    <div className="flex justify-between px-8">
+                      <Image
+                        alt="close icon"
+                        src={"/closeIcon.svg"}
+                        width={24}
+                        height={24}
+                        className="opacity-0 h-auto"
+                      />
+                      <div className="text-SoshColorGrey700 font-medium leading-Sosh22">
+                        Holders
+                      </div>
+                      <button onClick={() => setShowHoldersModal(false)}>
+                        <Image
+                          alt="close icon"
+                          src={"/closeIcon.svg"}
+                          width={24}
+                          height={24}
+                          className="h-auto"
+                        />
+                      </button>
+                    </div>
+                    <div
+                      className="flex justify-between px-4"
+                      onClick={() => router.push("account/otherAccount")}
+                    >
+                      <div className="flex gap-4 justify-center text-SoshColorGrey700 items-center">
+                        <div>
+                          <Image
+                            alt=""
+                            src={"/exampleUser1.svg"}
+                            width={34}
+                            height={34}
+                            className="bg-cover h-auto"
+                          />
+                        </div>
+                        <p className="text-sm leading-5">@Kevin001</p>
+                      </div>
+                      <div className="flex items-center text-sm leading-5">
+                        Holding 1 CCTs
+                      </div>
+                    </div>
+                    <div
+                      className="flex justify-between px-4"
+                      onClick={() => router.push("account/otherAccount")}
+                    >
+                      <div className="flex gap-4 justify-center items-center">
+                        <div>
+                          <Image
+                            alt=""
+                            src={"/exampleUser2.svg"}
+                            width={34}
+                            height={34}
+                            className="bg-cover h-auto"
+                          />
+                        </div>
+                        <p className="text-sm leading-5 text-SoshColorGrey700">
+                          @Alan001
+                        </p>
+                      </div>
+                      <div className="flex items-center text-SoshColorGrey700 text-sm leading-5">
+                        Holding 1 CCTs
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         );
       })}
