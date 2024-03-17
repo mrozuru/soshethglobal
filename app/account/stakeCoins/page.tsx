@@ -18,7 +18,7 @@ const StakeCoins = () => {
         >
           Stake ETH
         </button>
-        <button
+        {/* <button
           onClick={() => router.push('/account/stakeAPE')}
           className="px-8 py-2 text-sm leading-Sosh22 text-white rounded-lg sosh__linear-gradient"
         >
@@ -29,7 +29,7 @@ const StakeCoins = () => {
           className="px-8 py-2 text-sm leading-Sosh22 text-white rounded-lg sosh__linear-gradient"
         >
           Stake WLD
-        </button>
+        </button> */}
       </div>
     </div>
   );

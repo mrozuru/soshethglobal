@@ -2,7 +2,7 @@
 
 import { PrivyProvider } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
-import { baseSepolia } from 'viem/chains';
+import { auroraTestnet } from 'viem/chains';
 
 export default function PrivyProviderWrapper({
   children,
@@ -17,7 +17,7 @@ export default function PrivyProviderWrapper({
         return isNewUser ? router.push("/post/newuser") : router.push("/ccts");
       }}
       config={{
-        defaultChain: baseSepolia,
+        defaultChain: auroraTestnet,
         appearance: {
           showWalletLoginFirst: false,
           accentColor: "#6A6FF5",

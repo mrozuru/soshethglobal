@@ -15,8 +15,8 @@ import { formatUnits } from 'ethers/lib/utils';
 import { useWallets, usePrivy } from "@privy-io/react-auth";
 
 
-const SSTContractAddress = '0x97D1F1c5dF276f7af2a8E5Ff794635A39490B4B0'; 
-const CertiContractAddress = '0xB2681BF2398649bBef2c350188598555e93d733b';
+const SSTContractAddress = '0x62FAD8c5ff4A29e91De109C6A64C03aA9b2860F3'; 
+const CertiContractAddress = '0xd44687D397aaFdEc583bd6218820713Bfa10c59c';
 
 interface data {
   comments: string[];

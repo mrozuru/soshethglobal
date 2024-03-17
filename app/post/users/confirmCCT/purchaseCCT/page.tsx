@@ -12,8 +12,8 @@ import { ethers } from 'ethers';
 import CertiABI from '../../../../../contracts/Certi.json'; 
 import SSTABI from '../../../../../contracts/SST.json'; 
 
-const SSTContractAddress = '0x97D1F1c5dF276f7af2a8E5Ff794635A39490B4B0';
-const CertiContractAddress = '0xB2681BF2398649bBef2c350188598555e93d733b';
+const SSTContractAddress = '0x62FAD8c5ff4A29e91De109C6A64C03aA9b2860F3';
+const CertiContractAddress = '0xd44687D397aaFdEc583bd6218820713Bfa10c59c';
 
 function App(): JSX.Element {
   const router = useRouter();
